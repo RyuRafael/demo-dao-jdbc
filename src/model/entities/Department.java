@@ -5,19 +5,15 @@ import java.util.Objects;
 
 public class Department implements Serializable {
 
-    private String name;
     private Integer id;
+    private String name;
 
-    public Department(String name, Integer id) {
-        this.name = name;
+    public Department() {
+
+    }
+
+    public Department(Integer id, String name) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 
@@ -29,20 +25,27 @@ public class Department implements Serializable {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Department that)) return false;
-        return Objects.equals(name, that.name) && Objects.equals(id, that.id);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, id);
+        return Objects.hashCode(id);
     }
 
     @Override
     public String toString() {
-        return "Department{" + "name='" + name + '\'' + ", id=" + id + '}';
+        return "Department{" + "id=" + id + ", name='" + name + '\'' + '}';
     }
-
 }
