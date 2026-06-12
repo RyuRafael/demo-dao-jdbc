@@ -2,54 +2,72 @@ package db;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 public class DB {
 
-	public static Connection conn = null;
+    public static Connection conn = null;
 
-	// Iniciar conexão
-	public static Connection getConnection() {
+    // Iniciar conexão
+    public static Connection getConnection() {
 
-		if (conn == null) {
-			try {
-				Properties props = new Properties();
-				String url = props.getProperty("dburl");
-				conn = DriverManager.getConnection(url, props);
-			} catch (SQLException e) {
-				throw new DbException(e.getMessage());
-			}
-		}
+        if (conn == null) {
+            try {
+                Properties props = loadProperties();
+                String url = props.getProperty("dburl");
+                conn = DriverManager.getConnection(url, props);
+            } catch (SQLException e) {
+                throw new DbException(e.getMessage());
+            }
+        }
 
-		return conn;
-	}
+        return conn;
+    }
 
-	// Fechar Conexão
+    // Fechar Conexão
 
-	public static void closeConnection() {
+    public static void closeConnection() {
 
-		try {
-			if (conn != null) {
-				conn.close();
-			}
-		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
-		}
-	}
+        try {
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+    }
 
-	// Ler o arquivo db.properties.
-	private static Properties loadProperties() {
+    // Ler o arquivo db.properties.
+    private static Properties loadProperties() {
 
-		try (FileInputStream fs = new FileInputStream("db.properties")) {
-			Properties props = new Properties();
-			props.load(fs);
-			return props;
+        try (FileInputStream fs = new FileInputStream("db.properties")) {
+            Properties props = new Properties();
+            props.load(fs);
+            return props;
 
-		} catch (IOException e) {
-			throw new DbException(e.getMessage());
-		}
-	}
+        } catch (IOException e) {
+            throw new DbException(e.getMessage());
+        }
+    }
+
+    public static void closeStatement(Statement ps) {
+        try {
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+    }
+
+    public static void closeResultSet(ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+    }
 }

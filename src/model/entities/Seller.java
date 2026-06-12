@@ -14,6 +14,10 @@ public class Seller implements Serializable {
 
     private Department department;
 
+    public Seller() {
+
+    }
+
     public Seller(int i, String bob, String mail, Date date, double v, Department obj) {
         this.id = i;
         this.name = bob;
@@ -47,8 +51,8 @@ public class Seller implements Serializable {
         this.email = email;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public Date getBirthDate(java.sql.Date birthDate) {
+        return this.birthDate;
     }
 
     public void setBirthDate(Date birthDate) {
