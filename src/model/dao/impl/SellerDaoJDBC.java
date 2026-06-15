@@ -51,17 +51,9 @@ public class SellerDaoJDBC implements SellerDao {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                Department dp = new Department();
-                dp.setId(rs.getInt("DepartmentId"));
-                dp.setName(rs.getString("DepName"));
 
-                Seller seller = new Seller();
-                seller.setId(id);
-                seller.setName(rs.getString("Name"));
-                seller.setEmail(rs.getString("Email"));
-                seller.setBaseSalary(rs.getDouble("BaseSalary"));
-                seller.setBirthDate(rs.getDate("BirthDate"));
-                seller.setDepartment(dp);
+                Department dp = objToDepartment(rs);
+                Seller seller = objToSeller(rs, dp);
 
                 return seller;
             }
@@ -69,15 +61,40 @@ public class SellerDaoJDBC implements SellerDao {
             return null;
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        }
-        finally {
+        } finally {
             DB.closeStatement(ps);
             DB.closeResultSet(rs);
         }
+    }
+
+    // Instancia e retorna um obj Seller com dados da tabela
+    private Seller objToSeller(ResultSet rs, Department dp) throws SQLException {
+        Seller seller = new Seller();
+
+        seller.setId(rs.getInt("Id"));
+        seller.setName(rs.getString("Name"));
+        seller.setEmail(rs.getString("Email"));
+        seller.setBaseSalary(rs.getDouble("BaseSalary"));
+        seller.setBirthDate(rs.getDate("BirthDate"));
+        seller.setDepartment(dp);
+
+        return seller;
+    }
+
+    // Instancia e retorna um obj Department com dados da tabela
+    private Department objToDepartment(ResultSet rs) throws SQLException {
+
+        Department dp = new Department();
+        dp.setId(rs.getInt("DepartmentId"));
+        dp.setName(rs.getString("DepName"));
+
+        return dp;
     }
 
     @Override
     public List<Seller> findAll() {
         return List.of();
     }
+
+
 }

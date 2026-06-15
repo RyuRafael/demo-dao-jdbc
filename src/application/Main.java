@@ -10,6 +10,8 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // Buscar vendedores  por Id
+        System.out.println("=== Seller findById ===");
         SellerDao sellerDao = DaoFactory.createSellerDao();
         Seller seller = sellerDao.findById(3);
 
