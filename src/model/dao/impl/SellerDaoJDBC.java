@@ -10,7 +10,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SellerDaoJDBC implements SellerDao {
 
@@ -35,6 +38,7 @@ public class SellerDaoJDBC implements SellerDao {
 
     }
 
+    // Buscar vendedor por id
     @Override
     public Seller findById(Integer id) {
 
@@ -52,8 +56,8 @@ public class SellerDaoJDBC implements SellerDao {
 
             if (rs.next()) {
 
-                Department dp = objToDepartment(rs);
-                Seller seller = objToSeller(rs, dp);
+                Department dept = objToDepartment(rs);
+                Seller seller = objToSeller(rs, dept);
 
                 return seller;
             }
@@ -68,7 +72,7 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     // Instancia e retorna um obj Seller com dados da tabela
-    private Seller objToSeller(ResultSet rs, Department dp) throws SQLException {
+    private Seller objToSeller(ResultSet rs, Department dept) throws SQLException {
         Seller seller = new Seller();
 
         seller.setId(rs.getInt("Id"));
@@ -76,7 +80,7 @@ public class SellerDaoJDBC implements SellerDao {
         seller.setEmail(rs.getString("Email"));
         seller.setBaseSalary(rs.getDouble("BaseSalary"));
         seller.setBirthDate(rs.getDate("BirthDate"));
-        seller.setDepartment(dp);
+        seller.setDepartment(dept);
 
         return seller;
     }
@@ -86,7 +90,7 @@ public class SellerDaoJDBC implements SellerDao {
 
         Department dp = new Department();
         dp.setId(rs.getInt("DepartmentId"));
-        dp.setName(rs.getString("DepName"));
+        dp.setName(rs.getString("Name"));
 
         return dp;
     }
@@ -96,5 +100,42 @@ public class SellerDaoJDBC implements SellerDao {
         return List.of();
     }
 
+    // Retorna um lista de todos os vendedores do departamento informado
+    @Override
+    public List<Seller> findByDepartmentSeller(Department dept) {
 
+        List<Seller> sellers = new ArrayList<>();
+        Map<Integer, Department> map = new HashMap<>();
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            ps = conn.prepareStatement("SELECT seller.*, department.Name DeptName FROM seller "
+                    + "JOIN department ON seller.DepartmentId = department.Id WHERE DepartmentId = ? ORDER BY Name");
+
+            ps.setInt(1, dept.getId());
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                // Instancia um obj Departmente apontando para um departamento com o id armazenado no map;
+                Department department = map.get(rs.getInt("DepartmentId"));
+
+                // Verifica de o department esta null;
+                if (department == null) {
+                    department = objToDepartment(rs);
+                    map.put(rs.getInt("DepartmentId"), department);
+                }
+
+                Seller obj = objToSeller(rs, department);
+                sellers.add(obj);
+            }
+
+            return sellers;
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+    }
 }
