@@ -1,10 +1,8 @@
 package model.dao.impl;
 
-import db.DB;
 import db.DbException;
 import model.dao.DepartmentDao;
 import model.entities.Department;
-import model.entities.Seller;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

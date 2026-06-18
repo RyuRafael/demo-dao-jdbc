@@ -51,9 +51,7 @@ public class Seller implements Serializable {
         this.email = email;
     }
 
-    public Date getBirthDate(java.sql.Date birthDate) {
-        return this.birthDate;
-    }
+    public Date getBirthDate() {return birthDate;}
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
@@ -88,13 +86,6 @@ public class Seller implements Serializable {
 
     @Override
     public String toString() {
-        return "Seller{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", birthDate=" + birthDate +
-                ", baseSalary=" + baseSalary +
-                ", department=" + department +
-                '}';
+        return "Seller{" + "id=" + id + ", name='" + name + '\'' + ", email='" + email + '\'' + ", birthDate=" + birthDate + ", baseSalary=" + baseSalary + ", department=" + department + '}';
     }
 }
