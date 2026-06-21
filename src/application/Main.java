@@ -5,6 +5,7 @@ import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -26,7 +27,12 @@ public class Main {
 
         // Buscar todos os vendedores
         System.out.println("\n=== Test seller findAll ===");
-
         sellerDao.findAll().forEach(System.out::println);
+
+        // Inserir dados
+        System.out.println("\n=== Test insert seller ===");
+        Seller seller1 = new Seller(null, "Greg", "greg@gmail.com", new Date(), 4800.00, department);
+        sellerDao.insert(seller1);
+
     }
 }
