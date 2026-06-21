@@ -34,5 +34,15 @@ public class Main {
         Seller seller1 = new Seller(null, "Greg", "greg@gmail.com", new Date(), 4800.00, department);
         sellerDao.insert(seller1);
 
+        // Atualizar dados
+        System.out.println("\n=== Test update seller ===");
+
+        seller = sellerDao.findById(1);
+        seller.setName("Rafael");
+        sellerDao.update(seller);
+        System.out.println("Update complete.");
+
+        
+
     }
 }
