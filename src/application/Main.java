@@ -7,11 +7,14 @@ import model.entities.Seller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class Main {
 
     public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
 
         // Buscar vendedores  por Id
         System.out.println("=== Test seller findById ===");
@@ -37,12 +40,22 @@ public class Main {
         // Atualizar dados
         System.out.println("\n=== Test update seller ===");
 
-        seller = sellerDao.findById(1);
-        seller.setName("Rafael");
-        sellerDao.update(seller);
+        System.out.println("Enter id for delete seller: ");
+        Integer idUpdate = sc.nextInt();
+        Seller seller2 = sellerDao.findById(idUpdate);
+        seller2.setName("NovoNome");
+        sellerDao.update(seller2);
         System.out.println("Update complete.");
 
-        
+        // Deletar
+        System.out.println("\n=== Test delete seller ===");
+        System.out.println("Enter id for delete seller: ");
+        System.out.println("Enter id for delete seller: ");
+        Integer idDelete = sc.nextInt();
+        sellerDao.deleterById(idDelete);
+        System.out.println("Delete completed");
+
+        sc.close();
 
     }
 }
